@@ -61,7 +61,7 @@ echo ""
 
 # Rebuild C99 headers and library
 echo "Rebuilding C99..."
-./scripts/rebuild_c99.sh > /dev/null
+./Scripts/rebuild_c99.sh > /dev/null
 
 # Clean and build openssl_test
 echo "Building C99 openssl_test..."

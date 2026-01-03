@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-sh scripts/clean.sh
-sh scripts/rebuild_swift.sh
+sh Scripts/clean.sh
+sh Scripts/rebuild_swift.sh
 
 echo "--- 1. Using existing DSTU X.509 types (from Sources/Suite/ASN1SCG) ---"
 echo "  Note: DSTU.asn1 provides Certificate, Name, AlgorithmIdentifier, etc."

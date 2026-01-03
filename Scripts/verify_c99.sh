@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sh scripts/clean.sh
-sh scripts/rebuild_c99.sh
+sh Scripts/clean.sh
+sh Scripts/rebuild_c99.sh
 
 printf '\n: running C99 Test Roundtrip\n'
 ./Languages/C99/test_roundtrip
