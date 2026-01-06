@@ -1,7 +1,13 @@
-rm -rf Languages/TypeScript/genereted
-rm -rf Languages/TypeScript/generated   
+#!/bin/bash
+set -e
 
-ASN1_LANG=typescript ASN1_OUTPUT=Languages/TypeScript/generated elixir basic.ex
+rm -rf Languages/TypeScript/generated
+
 ASN1_LANG=typescript ASN1_OUTPUT=Languages/TypeScript/generated elixir x-series.ex
-cd Languages/TypeScript
-git clone https://github.com/iho/der.ts
+
+# Clone der.ts if not present
+if [ ! -d "Languages/TypeScript/der.ts" ]; then
+    cd Languages/TypeScript
+    git clone https://github.com/iho/der.ts
+    cd ../..
+fi

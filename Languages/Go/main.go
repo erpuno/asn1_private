@@ -22,12 +22,12 @@ import (
 	"strings"
 	"time"
 
+	"tobirama/chat/basicaccesscontrol"
 	"tobirama/chat/chat"
 	"tobirama/chat/kep"
+	"tobirama/chat/pkix1implicit2009"
+	"tobirama/chat/pkixcmp2009"
 	"tobirama/chat/x500"
-	"tobirama/chat_xseries/basicaccesscontrol"
-	"tobirama/chat_xseries/pkix1implicit2009"
-	"tobirama/chat_xseries/pkixcmp2009"
 )
 
 func mustDNSGeneralName(host string) pkix1implicit2009.X2009GeneralName {

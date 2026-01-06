@@ -537,6 +537,10 @@ defmodule ASN1.TSEmitter do
     {inspect(val), ""}
   end
 
+  defp resolve_value_and_imports({:valueset, _}, _mod) do
+    {"0n /* valueset - not representable */", ""}
+  end
+
   defp resolve_value_and_imports(val, _mod) do
     {inspect(val), ""}
   end

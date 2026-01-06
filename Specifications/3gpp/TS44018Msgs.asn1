@@ -637,7 +637,7 @@ ConfigurationChangeCommand ::= SEQUENCE {
 
 /* 9.1.12c Configuration Change Acknowledge */
 --<is3GMessage/>
-ConfigurationChangeAck ::= NULL; -- message type only
+ConfigurationChangeAck ::= NULL -- message type only
 
 
 /* 9.1.12d Configuration Change Reject */
@@ -968,7 +968,7 @@ obj-notification-facch RR-SHORT-CLASS ::= { &msgType mt-notification-facch, &Val
 
 /* 9.1.21b Notification/NCH */
 --<is3GMessage checkContainer="true"/>
-NotificationNch ::= NULL; -- L2 pseudo length and message type only
+NotificationNch ::= NULL -- L2 pseudo length and message type only
 
 
 /* 9.1.21d Notification Response */
@@ -1105,7 +1105,7 @@ PartialRelease ::= SEQUENCE {
 
 /* 9.1.27 Partial Release Complete */
 --<is3GMessage/>
-PartialReleaseComplete ::= NULL; -- message type only
+PartialReleaseComplete ::= NULL -- message type only
 
 
 /* 9.1.28 Physical Information */
@@ -1173,12 +1173,12 @@ SystemInformationType2ter ::= SEQUENCE {
 
 /* 9.1.34a System Information Type 2quater */
 --<is3GMessage imperativeOnly="true"/>
-SystemInformationType2quater ::= NULL; -- L2 pseudo length and message type only
+SystemInformationType2quater ::= NULL -- L2 pseudo length and message type only
 
 
 /* 9.1.34b System Information Type 2n */
 --<is3GMessage imperativeOnly="true"/>
-SystemInformationType2n ::= NULL; -- L2 pseudo length and message type only
+SystemInformationType2n ::= NULL -- L2 pseudo length and message type only
 
 
 /* 9.1.35 System Information Type 3 */

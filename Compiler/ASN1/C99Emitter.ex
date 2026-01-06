@@ -1989,6 +1989,7 @@ defmodule ASN1.C99Emitter do
   end
 
   defp literal({:Externalvaluereference, _, mod, name}), do: sanitize_type_name("#{mod}_#{name}")
+  defp literal({:valueset, _}), do: "0 /* valueset - not representable */"
   defp literal(val) when is_integer(val), do: Integer.to_string(val)
   defp literal(val) when is_binary(val), do: ~s("#{val}")
   defp literal(val), do: inspect(val)

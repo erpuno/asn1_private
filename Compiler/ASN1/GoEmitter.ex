@@ -1038,12 +1038,26 @@ defmodule ASN1.GoEmitter do
     save(saveFlag, modname, goName, header <> body <> "\n")
   end
 
+  def integerValue(name, {:valueset, _}, modname, saveFlag) do
+    # Value sets cannot be directly represented as Go constants
+    # Generate a placeholder comment
+    clear_imports()
+    goName = name(name, modname)
+    header = emitHeader(modname)
+    body = "var #{goName} = 0 /* valueset - not representable as constant */"
+    save(saveFlag, modname, goName, header <> body <> "\n")
+  end
+
   def integerValue(name, val, modname, saveFlag) do
     clear_imports()
     goName = name(name, modname)
 
     header = emitHeader(modname)
-    body = "const #{goName} = #{val}"
+    body = if is_integer(val) do
+      "const #{goName} = #{val}"
+    else
+      "var #{goName} = 0 /* unsupported value type */"
+    end
 
     save(saveFlag, modname, goName, header <> body <> "\n")
   end

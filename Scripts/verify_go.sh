@@ -4,7 +4,6 @@ sh Scripts/clean.sh
 sh Scripts/rebuild_go.sh
 
 cd Languages/Go
-go build -buildvcs=false
-./tobirama
+go run main.go
 cd ../..
 

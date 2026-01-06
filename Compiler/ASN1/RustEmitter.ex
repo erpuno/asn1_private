@@ -90,6 +90,15 @@ defmodule ASN1.RustEmitter do
       "crate::algorithm_information2009__algorithm::AlgorithmInformation2009_Algorithm",
     "AlgorithmInformation2009Algorithm" =>
       "crate::algorithm_information2009__algorithm::AlgorithmInformation2009_Algorithm",
+
+    # DSTU has its own type definitions - map to local DSTU types
+    "DSTUAlgorithmIdentifier" => "crate::dstu__algorithm_identifier::DSTU_AlgorithmIdentifier",
+    "DSTU_AlgorithmIdentifier" => "crate::dstu__algorithm_identifier::DSTU_AlgorithmIdentifier",
+    "DSTUSubjectPublicKeyInfo" => "crate::dstu__subject_public_key_info::DSTU_SubjectPublicKeyInfo",
+    "DSTU_SubjectPublicKeyInfo" => "crate::dstu__subject_public_key_info::DSTU_SubjectPublicKeyInfo",
+    "DSTUAuthenticationFrameworkAlgorithmIdentifier" => "crate::dstu__algorithm_identifier::DSTU_AlgorithmIdentifier",
+    "DSTU_AuthenticationFrameworkAlgorithmIdentifier" => "crate::dstu__algorithm_identifier::DSTU_AlgorithmIdentifier",
+
     # SubjectPublicKeyInfo mappings
     "SubjectPublicKeyInfo" =>
       "crate::pkix1_explicit88__subject_public_key_info::PKIX1Explicit88_SubjectPublicKeyInfo",
@@ -1489,6 +1498,10 @@ defmodule ASN1.RustEmitter do
 
     val_str =
       case value do
+        {:valueset, _} ->
+          # Value sets cannot be directly represented as Rust constants
+          "0 /* valueset - not representable */"
+
         {:Externalvaluereference, _, mod, val_name} ->
           # Assuming the external module is imported or we can reference it fully qualified
           # For simplicity, let's try to map it to the generated name
@@ -1528,7 +1541,7 @@ defmodule ASN1.RustEmitter do
 
         _ ->
           # Fallback for other potential types, or error
-          inspect(value)
+          "0 /* unsupported value type */"
       end
 
     const_body = """

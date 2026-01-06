@@ -14,7 +14,6 @@ BEGIN
 IMPORTS 
 L3HdrOptions, NAS-PROTOCOL-CLASS, ProtoDiscr, SecProtMsgHeader FROM TS24007L3
 
-IMPORTS
 AccessPointName, AuthFailureParam, AuthParamAUTN, 
 AuthParamRAND, DaylightSavingTime, CiphKeySeqNum, 
 ConnectivityType, DeviceProperties, DRXParameter, EmergencyNumberList, 
@@ -29,7 +28,6 @@ TFT, TimeZone, TimeZoneAndTime, TMSIStatus, VoiceDomainPref,
 WLANOffloadAccept, DcnID, Non3GPPNetPolicies, ExtQualityOfService
 FROM TS24008IES
 
-IMPORTS
 AddnUpdateResult, AddnUpdateType, APNAggMaxBitRate, AuthRespParam, 
 CLI, CtrlPlaneOnlyInd, CtrlPlaneSvcType, CSFBResponse, DetachType, 
 EMMCause, EPSAttachType, EPSAttachResult, EPSBearerContextStatus, 

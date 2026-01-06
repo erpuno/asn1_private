@@ -6,7 +6,6 @@ ExtQualityOfService, MCCMNCPair, IMEI, IMEISV, TFT, TimeZoneAndTime,
 GPRSTimer, GPRSTimer3, TMGI
 FROM TS24008IES
 
-IMPORTS
 APNAggMaxBitRate, EPSQualityOfService, ExtAPNAggMaxBitRate, TimeDuration
 FROM TS24301IES
 ;
@@ -355,18 +354,18 @@ MobileIdentity ::= CHOICE {
    suci CHOICE {
       -- The supiFormat bit in the MobileIdentity determines which of these
       -- choices is present in an encoding.
-      supiImsi MobileIdentity_SUCI_IMSI,
-      supiNetSpecificId MobileIdentity_SUCI_NetId
+      supiImsi MobileIdentity-SUCI-IMSI,
+      supiNetSpecificId MobileIdentity-SUCI-NetId
    },
-   guti MobileIdentity_GUTI,
+   guti MobileIdentity-GUTI,
    imei IMEI,
-   stmsi MobileIdentity_STMSI,
+   stmsi MobileIdentity-STMSI,
    imeisv IMEISV,
-   mac MobileIdentity_MAC,
+   mac MobileIdentity-MAC,
    eui-64 OCTET STRING (SIZE(8))
 }
 
-MobileIdentity_GUTI ::= SEQUENCE {
+MobileIdentity-GUTI ::= SEQUENCE {
    mcc-mnc MCCMNCPair,
    amfRegionID INTEGER (0..255),
    amfSetID INTEGER (0..1023),
@@ -374,13 +373,13 @@ MobileIdentity_GUTI ::= SEQUENCE {
    tmsi OCTET STRING (SIZE (4))
 }
 
-MobileIdentity_STMSI ::= SEQUENCE {
+MobileIdentity-STMSI ::= SEQUENCE {
    amfSetID INTEGER (0..1023),
    amfPointer INTEGER (0..63),
    tmsi OCTET STRING (SIZE (4))
 }
 
-MobileIdentity_SUCI_IMSI ::= SEQUENCE {
+MobileIdentity-SUCI-IMSI ::= SEQUENCE {
    mcc-mnc MCCMNCPair,
    routingInd2 INTEGER (0..15),
    routingInd1 INTEGER (0..15),
@@ -393,12 +392,12 @@ MobileIdentity_SUCI_IMSI ::= SEQUENCE {
    schemeOutput OCTET STRING
 }
 
-MobileIdentity_SUCI_NetId ::= SEQUENCE {
+MobileIdentity-SUCI-NetId ::= SEQUENCE {
    --<length fixed-size="0">
    nai OCTET STRING
 }
 
-MobileIdentity_MAC ::= SEQUENCE {
+MobileIdentity-MAC ::= SEQUENCE {
    mauri BOOLEAN,
    macaddr OCTET STRING (SIZE(6))
 }
@@ -1911,7 +1910,7 @@ RemoteUEIdentity ::= SEQUENCE {
    --<inline/>
    ueid CHOICE {
       --<selector element="ruit" value="0"/>
-      suci MobileIdentity_SUCI_IMSI,
+      suci MobileIdentity-SUCI-IMSI,
       --<selector element="ruit" value="1"/>
       prukId OCTET STRING (SIZE (32))
    }
@@ -2362,8 +2361,8 @@ PDUSessionType ::= SEQUENCE {
 }
 
 SessionType ::= ENUMERATED {
-   st_ipv4(1), st_ipv6(2), st_ipv4v6(3), st_unstructured(4), st_eth(5),
-   st_MAX(7)
+   st-ipv4(1), st-ipv6(2), st-ipv4v6(3), st-unstructured(4), st-eth(5),
+   st-MAX(7)
 }
 
 /* 9.11.4.12 - QoS flow descriptions */
@@ -2595,7 +2594,7 @@ SSCMode ::= SEQUENCE {
 }
 
 SSCModeValue ::= ENUMERATED {
-   ssc_mode1(1), ssc_mode2(2), ssc_mode3(3), ssc_MAX(7)
+   ssc-mode1(1), ssc-mode2(2), ssc-mode3(3), ssc-MAX(7)
 }
 
 /* 9.11.4.17 - Re-attempt indicator */

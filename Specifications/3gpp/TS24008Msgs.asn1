@@ -13,7 +13,6 @@ BEGIN
 IMPORTS 
 NAS-PROTOCOL-CLASS, SecProtMsgHeader FROM TS24007L3
 
-IMPORTS
 AC-Reference-Number, AccessPointName, AddnNetFeatureSupport, 
 AddnUpdateParams, AddnUpdateType, AlertingPattern, 
 AllowedActions, AttachResult, AttachType, 
@@ -55,7 +54,6 @@ UserPlaneIntegInd, UserUser, VoiceDomainPref, WLANOffloadAccept,
 DcnID, PlmnCnID, Non3GPPNetPolicies, ExtProtoConfigOptions, ExtQualityOfService
 FROM TS24008IES
 
-IMPORTS
 UENetworkCapability
 FROM TS24301IES
 ;

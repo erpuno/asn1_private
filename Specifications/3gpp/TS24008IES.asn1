@@ -1993,7 +1993,7 @@ TFTPacketFilterContent ::= SEQUENCE {
    components SEQUENCE OF TFTPacketFilterComponent
 }
 
-TFTPacketFilterComponentType :: = ENUMERATED {
+TFTPacketFilterComponentType ::= ENUMERATED {
    ipv4Remote (16), ipv4Local (17), ipv6Remote (32),
    ipv6RemoteAddrPrefixLen (33), ipv6LocalAddrPrefixLen (35),
    protoIdNextHdr (48), singleLocalPort (64),

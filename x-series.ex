@@ -85,10 +85,8 @@ defmodule DependencyAnalyzer do
   Parse all imports from a list of files.
   Returns map of %{module_name => [imported_module_names]}
   """
-  def parse_all_imports(files, base_dir) do
-    Enum.reduce(files, %{}, fn filename, acc ->
-      path = Path.join(base_dir, filename)
-
+  def parse_all_imports(files) do
+    Enum.reduce(files, %{}, fn path, acc ->
       if File.exists?(path) do
         {modname, imports} = parse_imports(path)
         Map.put(acc, modname, imports)
@@ -102,15 +100,13 @@ defmodule DependencyAnalyzer do
   Topologically sort files based on import dependencies.
   Uses Kahn's algorithm. Returns sorted list of filenames.
   """
-  def topological_sort(deps, files, base_dir) do
+  def topological_sort(deps, files) do
     # Build module name -> filename mapping
     mod_to_file =
-      Enum.reduce(files, %{}, fn filename, acc ->
-        path = Path.join(base_dir, filename)
-
+      Enum.reduce(files, %{}, fn path, acc ->
         if File.exists?(path) do
           {modname, _} = parse_imports(path)
-          Map.put(acc, modname, filename)
+          Map.put(acc, modname, path)
         else
           acc
         end
@@ -220,12 +216,10 @@ defmodule DependencyAnalyzer do
   Analyzes type definitions to find recursive references.
   Returns list of "ModuleName_TypeName.field_name" strings.
   """
-  def detect_type_cycles(base_dir, files) do
+  def detect_type_cycles(files) do
     # First pass: collect all type definitions
     all_types =
-      Enum.reduce(files, %{}, fn filename, acc ->
-        path = Path.join(base_dir, filename)
-
+      Enum.reduce(files, %{}, fn path, acc ->
         if File.exists?(path) do
           types = collect_type_definitions(path)
           Map.merge(acc, types)
@@ -533,6 +527,11 @@ Application.put_env(
   "ASN1ObjectIdentifier"
 )
 
+if System.get_env("ASN1_LANG") == "rust" do
+  Application.put_env(:asn1scg, :DSTU_AttributeValue, "ASN1Node")
+  Application.put_env(:asn1scg, :DSTU_CertificateSerialNumber, "Vec<u8>")
+end
+
 ptypes = %{
   "SingleAttribute" =>
     {:sequence,
@@ -662,26 +661,111 @@ manual_boxing = [
   "LocationExpressions_LocationExpression.Composite",
   "LocationExpressions_CompositeLocationExpression.Complement",
   "LocationExpressions_CompositeLocationExpression.Intersection",
-  "LocationExpressions_CompositeLocationExpression.Union"
+  "LocationExpressions_CompositeLocationExpression.Union",
+  # From basic.ex
+  "LocationExpressionsConstituentLocator.Subprofile",
+  "LocationExpressionsSubprofileLocator.SubprofileOf",
+  "LocationExpressionsSubprofileLocator.SubprofileWith",
+  "LocationExpressionsObjectLocator.Subord",
+  "LocationExpressionsObjectLocator.ObjectWith",
+  "LocationExpressionsSubordArgument.Object",
+  "LocationExpressionsObjectWithArgument.Object",
+  "LocationExpressionsLocationExpression.Composite",
+  "LocationExpressionsCompositeLocationExpression.Complement",
+  "LocationExpressionsCompositeLocationExpression.Intersection",
+  "LocationExpressionsCompositeLocationExpression.Union",
+  "Chat_message_CHATMessage.body",
+  "CHATMessage.body"
 ]
+|> Enum.uniq()
 
 # File.mkdir_p!("Languages/AppleSwift/Generated")
 base_output = System.get_env("ASN1_OUTPUT") || "Generated/"
 Application.put_env(:asn1scg, :output, base_output)
-base_dir = "Specifications/x-series"
 
-# Get list of files
+# Define Source Directories
+source_dirs = [
+    "Specifications/x-series",
+    "Specifications/3gpp",
+    "Specifications/basic"
+]
+
+# Exclude ASN.1 files with unresolved dependencies
+# These files reference modules (CMIP-1, SS-Protocol, etc.) that aren't available
+excluded_files = [
+  # CMIP/SS related
+  "Attribute-ASN1Module.asn1",   # References CMIP-1 module
+  "SS-Protocol.asn1",            # References ROS, SS-Protocol modules
+  "SS-DataTypes.asn1",           # References MAP-* modules
+  "SS-Errors.asn1",              # References MAP-* modules
+  "SS-Operations.asn1",          # References MAP-* modules
+
+  # MAP series - interconnected with missing dependencies
+  "MAP-ApplicationContexts.asn1",
+  "MAP-BS-Code.asn1",
+  "MAP-CH-DataTypes.asn1",
+  "MAP-CallHandlingOperations.asn1",
+  "MAP-CommonDataTypes.asn1",
+  "MAP-DialogueInformation.asn1",
+  "MAP-ER-DataTypes.asn1",
+  "MAP-Errors.asn1",
+  "MAP-ExtensionDataTypes.asn1",
+  "MAP-GR-DataTypes.asn1",
+  "MAP-Group-Call-Operations.asn1",
+  "MAP-LCS-DataTypes.asn1",
+  "MAP-LocationServiceOperations.asn1",
+  "MAP-MS-DataTypes.asn1",
+  "MAP-MobileServiceOperations.asn1",
+  "MAP-OM-DataTypes.asn1",
+  "MAP-OperationAndMaintenanceOperations.asn1",
+  "MAP-Protocol.asn1",
+  "MAP-SM-DataTypes.asn1",
+  "MAP-SS-Code.asn1",
+  "MAP-SS-DataTypes.asn1",
+  "MAP-ShortMessageServiceOperations.asn1",
+  "MAP-SupplementaryServiceOperations.asn1",
+  "MAP-TS-Code.asn1",
+
+  # 3GPP TS series with incomplete definitions
+  "TS44018IES.asn1",
+  "TS44018Msgs.asn1",
+  "TS24501IES.asn1",
+  "TS24501Msgs.asn1",
+
+  # Mobile domain
+  "MobileDomainDefinitions.asn1",
+]
+
+# Get list of files from all directories
 raw_files =
   case System.argv() do
     [arg] ->
       file = if String.ends_with?(arg, ".asn1"), do: arg, else: arg <> ".asn1"
-      [file]
+      # Locate the specific file in any of the directories
+      found_path = Enum.find_value(source_dirs, fn dir ->
+         path = Path.join(dir, file)
+         if File.exists?(path), do: path, else: nil
+      end)
+
+      if found_path do
+        [found_path]
+      else
+        IO.puts("Error: Could not find #{file} in source directories.")
+        System.halt(1)
+      end
 
     _ ->
-      base_dir
-      |> File.ls!()
-      |> Enum.filter(&String.ends_with?(&1, ".asn1"))
-      # |> Enum.reject(&(&1 == "Location-Expressions.asn1"))
+      Enum.flat_map(source_dirs, fn dir ->
+        if File.exists?(dir) do
+            File.ls!(dir)
+            |> Enum.filter(&String.ends_with?(&1, ".asn1"))
+            |> Enum.reject(fn f -> f in excluded_files end)
+            |> Enum.map(&Path.join(dir, &1))
+        else
+            IO.puts("Warning: Directory #{dir} not found. Skipping.")
+            []
+        end
+      end)
       |> Enum.sort()
   end
 
@@ -689,18 +773,18 @@ IO.puts("=== Dependency Analysis ===")
 
 # Parse imports and build dependency graph
 IO.puts("Parsing imports...")
-deps = DependencyAnalyzer.parse_all_imports(raw_files, base_dir)
+deps = DependencyAnalyzer.parse_all_imports(raw_files)
 IO.puts("Found #{map_size(deps)} modules with dependencies")
 
 # Topologically sort files
 IO.puts("Topologically sorting by dependencies...")
-files = DependencyAnalyzer.topological_sort(deps, raw_files, base_dir)
+files = DependencyAnalyzer.topological_sort(deps, raw_files)
 IO.puts("Sorted order: #{length(files)} files")
 Enum.each(files, fn f -> IO.puts("Sorted: #{f}") end)
 
 # Detect type cycles for Box wrapping
 IO.puts("Detecting type cycles for Box wrapper...")
-detected_cycles = DependencyAnalyzer.detect_type_cycles(base_dir, files)
+detected_cycles = DependencyAnalyzer.detect_type_cycles(files)
 IO.puts("Detected #{length(detected_cycles)} cyclic type references")
 
 # Merge manual and detected boxing entries
@@ -726,9 +810,7 @@ IO.puts("\n=== Compilation ===")
 IO.puts("Pass 1: Collecting types...")
 Application.put_env(:asn1scg, :save, false)
 
-Enum.each(files, fn filename ->
-  path = Path.join(base_dir, filename)
-
+Enum.each(files, fn path ->
   if File.exists?(path) do
     XSeries.Config.setup_lang_env()
     ASN1.compile(false, path)
@@ -742,8 +824,7 @@ end)
 IO.puts("Pass 2: Resolving references...")
 Application.put_env(:asn1scg, :save, false)
 
-Enum.each(files, fn filename ->
-  path = Path.join(base_dir, filename)
+Enum.each(files, fn path ->
   XSeries.Config.setup_lang_env()
   ASN1.compile(false, path)
 end)
@@ -752,8 +833,7 @@ end)
 IO.puts("Pass 3: Generating code...")
 Application.put_env(:asn1scg, :save, true)
 
-Enum.each(files, fn filename ->
-  path = Path.join(base_dir, filename)
+Enum.each(files, fn path ->
   XSeries.Config.setup_lang_env()
   ASN1.compile(true, path)
 end)

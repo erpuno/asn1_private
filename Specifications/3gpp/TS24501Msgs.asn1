@@ -18,7 +18,6 @@ PLMNList, EmergencyNumberList, MobileStationClassmark2, SupportedCodecList,
 ExtDRXParams, Non3GPPNetPolicies
 FROM TS24008IES
 
-IMPORTS
 AuthRespParam, NASKeySetIdentifier, NASSecurityAlgorithms,
 UENetworkCapability, UEStatus, ExtEmergencyNumberList, EPSBearerContextStatus,
 UERadioCapId, UERadioCapIdDeletionInd, ReleaseAssistInd,
@@ -26,7 +25,6 @@ ServPLMNRateCtrl, WUSAssistanceInfo, UserDataContainer, UERequestType,
 PagingRestriction, HdrCompressConfig
 FROM TS24301IES
 
-IMPORTS
 ABBA, EAPMessage, MMCause, RegistrationType, MMCapability, NSSAI,
 PDUSessionStatus, TrackingAreaIdent, MobileIdentity, UESecurityCapability,
 UplinkDataStatus, MICOIndication, AllowedPDUSessionStatus, UEUsageSetting,
@@ -63,7 +61,7 @@ AUN3Indication, FeatureAuthIndication, PayloadContainerInfo, DeviceSecurityKey,
 OnDemandNSSAI, URSPRuleEnforceReports, ProtocolDescriptions, Ext5GCause
 FROM TS24501IES
 
-IMPORTS CP-PDU
+CP-PDU
 FROM TS24011Msgs
 ;
 

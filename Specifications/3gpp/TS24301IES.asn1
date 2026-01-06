@@ -63,7 +63,7 @@ AddnUpdateResult ::= SEQUENCE {
 /* 9.9.3.0B - Additional update type */
 
 AddnUpdateType ::= SEQUENCE {
-   pnb_CIoT ENUMERATED { 
+   pnb-CIoT ENUMERATED { 
       noAddInfo(0), cpCIotEpsPref(1), upCIotEpsPref(2), reserved(3) 
    },
    saf  BOOLEAN,

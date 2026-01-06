@@ -6,7 +6,7 @@ IMPORTS TBCDString FROM TS24008IES ;
 
 /* 8.1.4.1 CP-User data element */
 
-CPUserData ::= OCTET STRING (SIZE (0..249));
+CPUserData ::= OCTET STRING (SIZE (0..249))
 
 /* 8.1.4.2 CP-Cause element */
 
@@ -40,7 +40,7 @@ RPDestinationAddress ::= RPAddress
 
 /* 8.2.5.3 RP-User data element */
 
-RPUserData ::= OCTET STRING (SIZE (0..233));
+RPUserData ::= OCTET STRING (SIZE (0..233))
 
 /* 8.2.5.4 RP-Cause element */
 

@@ -959,14 +959,35 @@ public class #{javaName} {
       list
       |> Enum.map(fn
           {:NamedNumber, _, val} -> "#{val}"
-          val -> "#{val}"
+          {:Externalvaluereference, _, _, _} -> nil  # Skip external value references
+          val when is_integer(val) -> "#{val}"
+          val when is_atom(val) -> nil  # Skip named atoms
+          val when is_binary(val) -> val
+          _ -> nil  # Skip other unhandled types
       end)
+      |> Enum.reject(&is_nil/1)
       |> Enum.join(".")
   end
 
 
   @impl true
   def algorithmIdentifierClass(name, modname, saveFlag), do: sequence(name, [], modname, saveFlag) # Mock
+
+  @impl true
+  def integerValue(name, {:valueset, _}, modname, saveFlag) do
+    javaName = name(name, modname)
+    content = """
+package com.generated.asn1;
+
+import com.iho.asn1.ASN1Integer;
+
+public class #{javaName} {
+    public static final ASN1Integer VALUE = new ASN1Integer(0L); /* valueset - not representable */
+}
+"""
+    save(saveFlag, modname, javaName, content)
+    javaName
+  end
 
   @impl true
   def integerValue(name, val, modname, saveFlag) do
