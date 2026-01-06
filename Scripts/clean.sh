@@ -7,7 +7,6 @@ rm -rf ./Languages/C99/test_roundtrip
 rm -rf ./Languages/C99/test_suite
 rm -rf ./Languages/AppleSwift/Generated
 rm -rf ./Languages/Go/chat
-rm -rf ./Languages/Go/chat_xseries
 rm -rf ./Languages/AppleSwift/.build/
 rm -rf ./Languages/AppleSwift/Package.resolved
 rm -rf ./Languages/AppleSwift/verified.der
@@ -31,7 +30,6 @@ rm -f ./Languages/Java/generated_cert.der
 rm -f ./Languages/TypeScript/robot_go.crt
 rm -f ./Languages/TypeScript/robot_go.der
 rm -f ./Languages/TypeScript/robot_go_roundtrip.der
-rm -f ./Languages/Go/tobirama
 rm -f ./Languages/AppleSwift/generated_cycle.txt
 rm -f ./Languages/AppleSwift/generated_orig.txt
 rm -f ./Languages/AppleSwift/generated_verified.der
