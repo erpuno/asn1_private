@@ -41,7 +41,7 @@ The detailed worklog is presented as series of articles.
 X-Series
 --------
 
-X-Series profile contains full set of ITU standards. To regenerate Sources/Suite/XSeries folder use ./x-series.ex script.
+X-Series profile contains full set of ITU standards. To regenerate sources folder use `./asn1.ex` script.
 
 ```
 AESKeyWrapWithPad-02.asn1
@@ -119,7 +119,7 @@ Videotex-Coding-Attributes.asn1
 Basic
 -----
 
-Basic profile contains CHAT, LDAP and Ukrainian Cryptography Envelopes KEP and DSTU. To regenerate Sources/Suite/Basic folder use ./basic.ex script.
+Basic profile contains CHAT, LDAP and Ukrainian Cryptography Envelopes KEP and DSTU. To regenerate sources use `./asn1.ex` script.
 
 ```
 CHAT.asn1
@@ -131,7 +131,9 @@ LDAP.asn1
 Minimal
 -------
 
-Minimal profile contains vital viability testing. To regenerate Sources/Suite/Minimal folder use ./minimal.ex script. Suite profile contains minimal ASN.1 definition that should cover all compiler branches. Currently work in progress and lacks tensors.
+Minimal profile contains vital viability testing. To regenerate sources use `./asn1.ex` script.
+Suite profile contains minimal ASN.1 definition that should cover all compiler branches.
+Currently work in progress and lacks tensors.
 
 ```
 SUITE-EXPLICIT.asn1

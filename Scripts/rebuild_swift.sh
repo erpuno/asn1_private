@@ -8,6 +8,6 @@ rm -rf Languages/AppleSwift/Generated
 mkdir -p Languages/AppleSwift/Generated
 
 # Run the unified compiler with all specifications
-ASN1_LANG=swift ASN1_OUTPUT=Languages/AppleSwift/Generated elixir x-series.ex
+ASN1_LANG=swift ASN1_OUTPUT=Languages/AppleSwift/Generated elixir asn1.ex
 
 echo "Unified Swift generation complete in Languages/AppleSwift/Generated"

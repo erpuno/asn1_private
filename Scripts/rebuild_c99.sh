@@ -8,7 +8,7 @@ rm -rf "$ROOT_DIR"
 mkdir -p "$ROOT_DIR"
 
 printf ': generating C99 headers -> %s\n' "$ROOT_DIR"
-ASN1_LANG=c99 ASN1_OUTPUT="$ROOT_DIR" elixir x-series.ex
+ASN1_LANG=c99 ASN1_OUTPUT="$ROOT_DIR" elixir asn1.ex
 
 printf ': done. C99 headers available under %s\n' "$ROOT_DIR"
 

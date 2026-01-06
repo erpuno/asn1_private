@@ -16,4 +16,4 @@ if [ -d "$ASN1_OUTPUT" ]; then
     find "$ASN1_OUTPUT" -maxdepth 1 -type f ! -name 'Main.java' ! -name 'OpenSSLTest.java' -exec rm -f {} +
 fi
 
-elixir x-series.ex
+elixir asn1.ex
