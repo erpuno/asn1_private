@@ -145,7 +145,9 @@ Integration Testing
 
 To test Certificate Enrollment process you can run our
 Erlang/Elixir <a href="https://github.com/synrc/ca">CA
-certificate authoriry server</a> and test against its CMP service:
+certificate authoriry server</a> or
+use <a href="https://github.com/synrc/chat">CHAT instant messenger server</a>
+and test against its CMP/EST services.
 
 ```
 $ git clone git@github.com/synrc/ca
