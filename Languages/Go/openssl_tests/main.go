@@ -9,11 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"tobirama/chat/cryptographicmessagesyntax2010"
 	"tobirama/chat/pkcs10"
+	"tobirama/chat/pkcs8"
 	"tobirama/chat/pkix1explicit2009"
 	"tobirama/chat/x500"
-	"tobirama/chat_xseries/cryptographicmessagesyntax2010"
-	"tobirama/chat_xseries/pkcs8"
 )
 
 // TestResult holds the outcome of a single test.

@@ -690,6 +690,52 @@ source_dirs = [
     "Specifications/basic"
 ]
 
+# Exclude ASN.1 files with unresolved dependencies
+# These files reference modules (CMIP-1, SS-Protocol, etc.) that aren't available
+excluded_files = [
+  # CMIP/SS related
+  "Attribute-ASN1Module.asn1",   # References CMIP-1 module
+  "SS-Protocol.asn1",            # References ROS, SS-Protocol modules
+  "SS-DataTypes.asn1",           # References MAP-* modules
+  "SS-Errors.asn1",              # References MAP-* modules
+  "SS-Operations.asn1",          # References MAP-* modules
+
+  # MAP series - interconnected with missing dependencies
+  "MAP-ApplicationContexts.asn1",
+  "MAP-BS-Code.asn1",
+  "MAP-CH-DataTypes.asn1",
+  "MAP-CallHandlingOperations.asn1",
+  "MAP-CommonDataTypes.asn1",
+  "MAP-DialogueInformation.asn1",
+  "MAP-ER-DataTypes.asn1",
+  "MAP-Errors.asn1",
+  "MAP-ExtensionDataTypes.asn1",
+  "MAP-GR-DataTypes.asn1",
+  "MAP-Group-Call-Operations.asn1",
+  "MAP-LCS-DataTypes.asn1",
+  "MAP-LocationServiceOperations.asn1",
+  "MAP-MS-DataTypes.asn1",
+  "MAP-MobileServiceOperations.asn1",
+  "MAP-OM-DataTypes.asn1",
+  "MAP-OperationAndMaintenanceOperations.asn1",
+  "MAP-Protocol.asn1",
+  "MAP-SM-DataTypes.asn1",
+  "MAP-SS-Code.asn1",
+  "MAP-SS-DataTypes.asn1",
+  "MAP-ShortMessageServiceOperations.asn1",
+  "MAP-SupplementaryServiceOperations.asn1",
+  "MAP-TS-Code.asn1",
+
+  # 3GPP TS series with incomplete definitions
+  "TS44018IES.asn1",
+  "TS44018Msgs.asn1",
+  "TS24501IES.asn1",
+  "TS24501Msgs.asn1",
+
+  # Mobile domain
+  "MobileDomainDefinitions.asn1",
+]
+
 # Get list of files from all directories
 raw_files =
   case System.argv() do
@@ -713,7 +759,7 @@ raw_files =
         if File.exists?(dir) do
             File.ls!(dir)
             |> Enum.filter(&String.ends_with?(&1, ".asn1"))
-            # |> Enum.reject(&(&1 == "Location-Expressions.asn1"))
+            |> Enum.reject(fn f -> f in excluded_files end)
             |> Enum.map(&Path.join(dir, &1))
         else
             IO.puts("Warning: Directory #{dir} not found. Skipping.")
